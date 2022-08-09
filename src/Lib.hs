@@ -1,6 +1,4 @@
-module Lib
-    ( someFunc
-    ) where
+module Lib where
 
 import Data.Pool
 import Database.Persist.Sqlite
