@@ -18,23 +18,28 @@ runAppT body env = liftIO $ runReaderT (unAppT body) env
 
 -- TODO Try defining both SqlPersistT m a and DB a and try rewriting runDB in terms of them
 
-newtype SqlPersistT m a = SqlPersistT { unSqlPersistT :: ReaderT SqlBackend m a }
-  deriving newtype (Functor, Applicative, Monad, MonadReader Env, MonadIO)
+type SqlPersistT = ReaderT SqlBackend
 
-newtype DB a = DB { unDB :: AppT a }
-  deriving newtype (Functor, Applicative, Monad, MonadReader Env, MonadIO)
-
+type DB a = forall m. MonadIO m => SqlPersistT m a
 
 -- rewrite runDB in terms of SqlPersistT
 
 -- ORIGINAL
-runDBOrig :: ReaderT SqlBackend IO a -> AppT a
-runDBOrig body = do
+runDB :: ReaderT SqlBackend IO a -> AppT a
+runDB body = do
   pool <- asks envPool
   liftIO $ runSqlPool body pool
 
--- hows this!?!?!?!?!?
-runDB :: SqlPersistT m a -> DB a
-runDB body = do
-    pool <- asks envPool
-    liftIO $ runSqlPool (unSqlPersistT body) pool
+    
+-- version 1
+runDB1 :: MonadIO m => SqlPersistT m a -> AppT a
+runDB1 body = do
+  pool <- asks envPool
+  liftIO $ runSqlPool body pool
+
+    
+-- version 2
+runDB2 :: DB a -> AppT a
+runDB2 body = do
+  pool <- asks envPool
+  liftIO $ runSqlPool body pool
