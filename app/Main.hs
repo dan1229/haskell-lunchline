@@ -2,6 +2,8 @@ module Main where
 
 import Lib
 import Control.Monad.Logger
+import Database.Persist.Sqlite
+import Control.Monad.Reader
 
 runApp :: AppT ()
 runApp = do
