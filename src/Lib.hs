@@ -1,8 +1,26 @@
+{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE QuasiQuotes #-}
+{-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE GADTs #-}
+{-# LANGUAGE StandaloneDeriving #-}
+{-# LANGUAGE UndecidableInstances #-}
+{-# LANGUAGE DataKinds #-}
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+
 module Lib where
 
 import Data.Pool
 import Database.Persist.Sqlite
 import Control.Monad.Reader
+import Database.Persist.TH
+
+share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
+LineItem
+  name String
+  amount Int
+  deriving Show
+|]
 
 
 data Env = Env { envPool :: Pool SqlBackend }
