@@ -1,1 +1,5 @@
-All good (2 modules, at 11:33:59)
+/Users/daniel/projects/LunchLine/app/Main.hs:35:25-36: error:
+    Variable not in scope: weeklyBudget
+   |
+35 |   let remainingBudget = weeklyBudget - total
+   |                         ^^^^^^^^^^^^
