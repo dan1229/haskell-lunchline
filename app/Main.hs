@@ -32,6 +32,7 @@ runApp = do
     insert_ $ LineItem "Pizza" 11
     insert_ $ LineItem "Burger" 12
     getLineItemTotal
+  let weeklyBudget = 1000 :: Int
   let remainingBudget = weeklyBudget - total
   liftIO .  putStrLn $ "Remaining Budget: " <> show remainingBudget
 
